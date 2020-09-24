@@ -7,4 +7,10 @@ Members :
 
 Test
 
-This guide follows the recommended style given ulr(https://stackoverflow.com/questions/1896918/running-unittest-with-typical-test-directory-structure) [here]
+This guide follows the recommended style given ulr(https://stackoverflow.com/questions/1896918/running-unittest-with-typical-test-directory-structure) [here]  
+
+Example. 
+`
+$ cd lexicalAnalyzer
+$ python3 -m unittest
+`
