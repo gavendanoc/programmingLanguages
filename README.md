@@ -7,10 +7,20 @@ Members :
 
 Test
 
-This guide follows the recommended style given [here](https://stackoverflow.com/questions/1896918/running-unittest-with-typical-test-directory-structure) 
+This guide follows the recommended project structure for testing given [here](https://stackoverflow.com/questions/1896918/running-unittest-with-typical-test-directory-structure) 
 
-Example. 
+How to use ?
+This repo uses a python library called `unittest`. This allows to do testing as a command line tool.
+Examples  
+
+For checking all test
 ```shell
 $ cd lexicalAnalyzer
 $ python3 -m unittest
+```
+
+For checking a single set of tests, for example characters
+```shell
+$ cd lexicalAnalyzer
+$ python3 -m unittest tests.testCharacters
 ```
