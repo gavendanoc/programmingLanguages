@@ -167,5 +167,48 @@ end""",
     }
     self.assertEqual(tests.getLexicalOutput(case["code"]), case["result"])
 
+  def test_uncode_ejemplo1(self):
+    case = {
+      "code": """var z:num;
+z := 0;
+while (z < 10)""",
+      "result": """<var,1,1>
+<id,z,1,5>
+<tk_dospuntos,1,6>
+<num,1,7>
+<tk_puntoycoma,1,10>
+<id,z,2,1>
+<tk_asignacion,2,3>
+<tk_num,0,2,6>
+<tk_puntoycoma,2,7>
+<while,3,1>
+<tk_par_izq,3,7>
+<id,z,3,8>
+<tk_menor,3,10>
+<tk_num,10,3,12>
+<tk_par_der,3,14>"""
+    }
+    self.assertEqual(tests.getLexicalOutput(case["code"]), case["result"])
+
+  def test_uncode_ejemplo2(self):
+    case = {
+      "code": """## función min(x, y)
+function @min:num (x:num, y:num)""",
+      "result": """<function,2,1>
+<fid,@min,2,10>
+<tk_dospuntos,2,14>
+<num,2,15>
+<tk_par_izq,2,19>
+<id,x,2,20>
+<tk_dospuntos,2,21>
+<num,2,22>
+<tk_coma,2,25>
+<id,y,2,27>
+<tk_dospuntos,2,28>
+<num,2,29>
+<tk_par_der,2,32>"""
+    }
+    self.assertEqual(tests.getLexicalOutput(case["code"]), case["result"])
+
 if __name__ == "__main__":
   unittest.main()
