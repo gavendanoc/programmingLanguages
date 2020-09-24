@@ -258,8 +258,7 @@ def readNumber(ch, state):
     return otroCharacter
   elif state == 222: # punto character -> 
     if ch.isdigit(): return (2_222, 1)
-    error = ("error",-1) #ERROR: -1 porque el error esta en el character anterior
-    return error 
+    return (-221, -1) 
   elif state == 2_222: # Digito despues del punto -> 
     if ch.isdigit(): return (2_222, 1)
     return otroCharacter
@@ -347,6 +346,9 @@ def getTokens(data=[]):
         state = 0
         lexema.restart()
       elif state < 0:
+        for _ in range(-move): 
+          lexema.pop()
+        
         yield Token(getTokenFromState[state], lexema, row+1, lexema.initialPosition)
         state = 0
         lexema.restart()

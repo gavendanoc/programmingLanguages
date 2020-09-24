@@ -19,6 +19,7 @@ class TestIdentifiers(unittest.TestCase):
 <id,a,1,12>
 <tk_num,1.23,1,14>
 <id,a,1,18>
+<tk_num,1,1,20>
 >>> Error léxico(línea:1,posición:21)"""
     }
     self.assertEqual(tests.getLexicalOutput(case["code"]), case["result"])
