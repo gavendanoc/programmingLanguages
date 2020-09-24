@@ -40,7 +40,6 @@ class TestCharacters(unittest.TestCase):
     }
     self.assertEqual(tests.getLexicalOutput(case["code"]), case["result"])
     
-    
   def test_general_characters(self):
     case = {
       "code": """{}();,:<>+-*/%.\n""",
