@@ -72,8 +72,8 @@ class Lexema:
     if self.initialPosition == -1:
       self.initialPosition = position
 
-  def pop(self):
-    self.text = self.text[:-1]
+  def pop(self, quantity=1):
+    self.text = self.text[:-quantity]
     return self.text
   
   def restart(self):
@@ -345,9 +345,7 @@ def getTokens(data=[]):
         state = 0
         lexema.restart()
       elif state < 0:
-        for _ in range(-move): 
-          lexema.pop()
-        
+        if move < 0: lexema.pop(-move)
         yield Token(getTokenFromState[state], lexema, row+1, lexema.initialPosition)
         state = 0
         lexema.restart()
