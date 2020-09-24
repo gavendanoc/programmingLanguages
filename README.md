@@ -11,15 +11,15 @@ This guide follows the recommended project structure for testing given [here](ht
 
 #### How to use ?
 This repo uses a python library called `unittest`, which allows testing as a command line tool.
-Examples  
 
-For checking all test
+##### Examples
+For checking all test:
 ```shell
 $ cd lexicalAnalyzer
 $ python3 -m unittest
 ```
 
-For checking a single set of tests, for example characters
+For checking a single set of tests, in this case characters:
 ```shell
 $ cd lexicalAnalyzer
 $ python3 -m unittest tests.testCharacters
