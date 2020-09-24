@@ -143,7 +143,6 @@ def nextStatefromInitial(ch, *_):
       '@': (31,1),
       ' ': (100,1),
       '\n': (-101,1), # --->> Cambiado por gabriel
-      # incluir todos los caracteres que son validos como primer caracter en los tokens
   }
   error = ("error",0)
   next = characters.get(ch,error)
