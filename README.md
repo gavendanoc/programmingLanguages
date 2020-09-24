@@ -11,7 +11,7 @@ This guide follows the recommended project structure for testing given [here](ht
 
 #### How to use ?
 This repo uses a python library called `unittest`, which allows testing as a command line tool.  
-**Examples**
+**Examples**  
 For checking all test:
 ```shell
 $ cd lexicalAnalyzer
