@@ -23,5 +23,27 @@ class TestIdentifiers(unittest.TestCase):
     }
     self.assertEqual(tests.getLexicalOutput(case["code"]), case["result"])
 
+  def test_functions1(self):
+    case = {
+      "code": """@max@min""",
+      "result": """<fid,@max,1,1>
+<fid,@min,1,5>"""
+    }
+    self.assertEqual(tests.getLexicalOutput(case["code"]), case["result"])
+  
+  def test_functions2(self):
+    case = {
+      "code": """@1""",
+      "result": """>>> Error léxico(línea:1,posición:1)"""
+    }
+    self.assertEqual(tests.getLexicalOutput(case["code"]), case["result"])
+
+  def test_functions3(self):
+    case = {
+      "code": """@@""",
+      "result": """>>> Error léxico(línea:1,posición:1)"""
+    }
+    self.assertEqual(tests.getLexicalOutput(case["code"]), case["result"])
+
 if __name__ == "__main__":
   unittest.main()
