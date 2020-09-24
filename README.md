@@ -10,7 +10,7 @@ Members :
 This guide follows the recommended project structure for testing given [here](https://stackoverflow.com/questions/1896918/running-unittest-with-typical-test-directory-structure) 
 
 #### How to use ?
-This repo uses a python library called `unittest`. This allows to do testing as a command line tool.
+This repo uses a python library called `unittest`, which allows testing as a command line tool.
 Examples  
 
 For checking all test
