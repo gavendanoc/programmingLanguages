@@ -15,7 +15,7 @@ Members:
 """
 
 def preprocessLine(line):
-  return line.replace("\t", " " * 4)
+  return line.replace("\t", " " * 4).replace("\r", '') + '\n'
 
 class Token:
   reserved_words = (
@@ -120,7 +120,7 @@ getTokenFromState = {
 #siguiente estado desde state = 0
 def nextStatefromInitial(ch, *_):
   if ch.isdigit(): return (22, 1)
-  if ch.isalpha(): return (30, 1)
+  if ch.isalpha() or ch == '_': return (30, 1)
 
   characters = {
       '{': (2, 1),
@@ -265,7 +265,7 @@ def readNumber(ch, state):
     raise Exception("State not defined for realNumber function")
 
 def readIdentifier(ch, *_):
-  if ch.isdigit() or ch.isalpha(): return (30, 1)
+  if ch.isdigit() or ch.isalpha() or ch == '_': return (30, 1)
   otroCharacter = (-301, 0)
   return otroCharacter
 
@@ -275,7 +275,7 @@ def readFunction(ch, state):
     otroCharacter = ("error", -1)
     return otroCharacter
   elif state == 310:
-    if ch.isdigit() or ch.isalpha(): return (310, 1)
+    if ch.isdigit() or ch.isalpha() or ch == '_': return (310, 1)
     otroCharacter = (-311, 0)
     return otroCharacter
   else:
