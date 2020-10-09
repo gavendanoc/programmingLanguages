@@ -13,6 +13,7 @@ Members:
 * Juan Diego Medina Naranjo          jmedinan@unal.edu.co
 
 """
+import itertools
 
 def preprocessLine(line):
   return line.replace("\t", " " * 4).replace("\r", '') + '\n'
@@ -82,6 +83,18 @@ class Lexema:
 
   def __str__(self):
     return self.text
+
+class Lexical:
+  def __init__(self, data):
+    self.iterator = getTokens(data)
+
+  def peekToken(self):
+    nextToken = next(self.iterator, None)
+    self.iterator = itertools.chain([nextToken], self.iterator)
+    return nextToken
+
+  def nextToken(self):
+    return next(self.iterator, None)
 
 # Valores tomados del esquema de Draw.io
 getTokenFromState = {
