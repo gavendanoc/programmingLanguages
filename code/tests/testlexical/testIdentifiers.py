@@ -1,5 +1,5 @@
 import unittest
-import tests
+import tests.testlexical as tests
 
 class TestIdentifiers(unittest.TestCase):
   def test_identifiers1(self):

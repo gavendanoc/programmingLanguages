@@ -1,5 +1,5 @@
 import unittest
-import tests
+import tests.testlexical as tests
 
 class testRandomEntries(unittest.TestCase):
   def test_jaime(self):
@@ -217,7 +217,7 @@ kasd123
 <tk_num,100,85,1>
 <id,h,85,4>"""
     }
-    self.assertEqual(tests.getLexicalOutput(case["code"]), case["result"])
+    import tests.testlexical as tests
 
 
 if __name__ == "__main__":

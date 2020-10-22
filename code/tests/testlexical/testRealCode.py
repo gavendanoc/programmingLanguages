@@ -1,5 +1,5 @@
 import unittest
-import tests
+import tests.testlexical as tests
 
 class TestRealCode(unittest.TestCase):
   def test_code_short(self):

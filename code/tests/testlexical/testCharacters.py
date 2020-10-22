@@ -1,5 +1,5 @@
 import unittest
-import tests
+import tests.testlexical as tests
 
 class TestCharacters(unittest.TestCase):
   def test_sum(self):

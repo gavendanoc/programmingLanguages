@@ -1,4 +1,7 @@
-from lexical import Lexical, LexicalError
+if __name__ == "__main__": 
+  from lexical import Lexical, LexicalError
+else:
+  from .lexical import Lexical, LexicalError # used when testing
 
 class Rule:
   def __init__(self, ruleSymbols, pred):
@@ -188,7 +191,12 @@ class SyntacticError(Exception):
     'tk_llave_der' : '}'
   } 
 
-  def __init__(self, lexem, predictions, row=1, col=1):
+  def __init__(self, lexem, predictions, row=1, col=1, message=None):
+    if message != None:
+      self.message = message
+      super().__init__(self.message)
+      return
+
     expected = sorted(map(SyntacticError.convertSymbol, predictions))
     for i,v in enumerate(expected):
       if i == len(expected)-1:
@@ -197,7 +205,7 @@ class SyntacticError(Exception):
         expected[i] = expected[i+1]
         expected[i+1] = v
     expected = str(expected)[1:-1] # Quitar corchetes al inicio y final de lista
-    self.message = "<{}:{}> Error sintactico: se encontro: ‘{}’; se esperaba: {}".format(row, col, lexem, expected)
+    self.message = "<{}:{}> Error sintactico: se encontro: ‘{}’; se esperaba: {}.".format(row, col, lexem, expected)
     super().__init__(self.message)
 
   def convertSymbol (symbol):
@@ -213,27 +221,28 @@ def match(expectedSymbol, lexical):
   token = lexical.nextToken()
   # TODO : Cambiar, los tokens en realidad son objectos (Class token)
   if token.token != expectedSymbol: 
-    raise SyntacticError(token.lexema, expectedSymbol, token.row, token.col)
+    raise SyntacticError(token.lexema, [expectedSymbol], token.row, token.col)
 
 def asd(nonterminal, processedGrammar, lexical):
   firstSymbol = lexical.peekToken()
   # print(f"Enter {nonterminal} reading symbol {firstSymbol}")
-  if firstSymbol == None: print("----> syntactic error") # no hay mas simbolos para leer
+  if firstSymbol == None: 
+    raise SyntacticError(None, None, message="Error sintactico: se encontro final de archivo; se esperaba ‘end’.") # no hay mas simbolos para leer
   
   rules = processedGrammar[nonterminal].rules
   selectedRule = list(filter(lambda rule : firstSymbol.token in rule.pred, rules))
   if len(selectedRule) > 1: print("----> grammar error") # Si el largo es mas que 1, hay muchos conjuntos de prediccion
   if len(selectedRule) == 0: # si el largo es 0, el simbolo no esta en prediccion
     predictions = {symbol for rule in rules for symbol in rule.pred}
-    print(f"  Error in {nonterminal}")
+    # print(f"  Error in {nonterminal}")
     raise SyntacticError(firstSymbol.lexema, predictions, firstSymbol.row, firstSymbol.col)
 
-  print(f"  selected rule {selectedRule}")
+  # print(f"  selected rule {selectedRule}")
   ruleSymbols = selectedRule[0].ruleSymbols
   if ruleSymbols == ['e']: ruleSymbols = []
   for symbol in ruleSymbols: 
     if symbol not in processedGrammar.keys():
-      print(f"      {nonterminal} matching {symbol}")
+      # print(f"      {nonterminal} matching {symbol}")
       match(symbol, lexical)
     else: 
       asd(symbol, processedGrammar, lexical)
