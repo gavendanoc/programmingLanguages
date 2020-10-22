@@ -205,7 +205,7 @@ class SyntacticError(Exception):
         expected[i] = expected[i+1]
         expected[i+1] = v
     expected = str(expected)[1:-1] # Quitar corchetes al inicio y final de lista
-    self.message = "<{}:{}> Error sintactico: se encontro: ‘{}’; se esperaba: {}.".format(row, col, lexem, expected)
+    self.message = "<{}:{}> Error sintactico: se encontro: '{}'; se esperaba: {}.".format(row, col, lexem, expected)
     super().__init__(self.message)
 
   def convertSymbol (symbol):
@@ -260,7 +260,7 @@ def createGrammarDict(grammarText):
     grammarDict[nt].append(Rule(rowTks,[]))
   return grammarDict
 
-grammarFile = "./src/grammarFile.txt"
+grammarFile = "./grammarFile.txt"
 grammar = {}
 with open(grammarFile,'r') as f:
   text = f.read()
@@ -281,7 +281,9 @@ if __name__ == "__main__":
 
   try:
     asd('prog', syntacticAnalizer.noTerminals, lexical)
+    print('El analisis sintactico ha finalizado correctamente.')
   except SyntacticError as se:
     print(se.message)
   except LexicalError as le:
     print(le.message)
+  

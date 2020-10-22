@@ -1,10 +1,10 @@
 lexpr -> nexpr GA 
-GA -> tk_and nexpr GB
-GA -> tk_or nexpr GC
+GA -> and nexpr GB
+GA -> or nexpr GC
 GA -> e
-GB -> tk_and nexpr GB
+GB -> and nexpr GB
 GB -> e
-GC -> tk_or nexpr GC
+GC -> or nexpr GC
 GC -> e
 
 &
