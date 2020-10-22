@@ -22,6 +22,18 @@ $ python3 -m unittest
 
 For checking a single set of tests, in this case characters:
 ```shell
-$ cd lexicalAnalyzer
-$ python3 -m unittest tests.testCharacters
+$ cd code
+$ python3 -m unittest tests.testlexical.testCharacters
+```
+
+This worsks for other folders too, in this case syntactic examples:
+```shell
+$ cd code
+$ python3 -m unittest tests.testsyntax.testExamples
+```
+
+You can also check a whole section, for running all the syntax test do : 
+```shell
+$ cd code
+$ python3 -m unittest discover tests.testsyntax
 ```
