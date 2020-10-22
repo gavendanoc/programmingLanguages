@@ -247,217 +247,29 @@ def asd(nonterminal, processedGrammar, lexical):
     else: 
       asd(symbol, processedGrammar, lexical)
 
-subgrammar_lexpr = {
-  'lexpr' : [Rule('nexpr GA',[])],
-  'GA' : [
-    Rule('and nexpr GB',[]), 
-    Rule('or nexpr GC',[]),
-    Rule('e',[])
-  ],
-  'GB' : [
-    Rule('and nexpr GB',[]),
-    Rule('e',[])
-  ],
-  'GC' : [
-    Rule('or nexpr GC',[]),
-    Rule('e',[])
-  ]
-}
+def createGrammarDict(grammarText):
+  grammarDict = {}
+  text = grammarText.split("\n")
+  for row in text:
+    row = row.split()
+    if len(row) == 0 : continue
+    nt = row[0]
+    if nt not in grammarDict:
+      grammarDict[nt] = []
+    rowTks = row[2:]
+    grammarDict[nt].append(Rule(rowTks,[]))
+  return grammarDict
 
-subgrammar_simple_expr = {
-  'simple_expr' : [Rule('term GD',[])],
-  'GD' : [
-    Rule('tk_mas term GD',[]), 
-    Rule('tk_menos term GD',[]),
-    Rule('e',[])
-  ]
-}
-
-subgrammar_factor = {
-  'factor' : [
-    Rule('tk_num',[]),
-    Rule('true',[]),
-    Rule('false',[]),
-    Rule('id GF',[]),
-    Rule('tk_incremento id',[]),
-    Rule('tk_decremento id',[]),
-    Rule('tk_par_izq lexpr tk_par_der',[]),
-    Rule('fid tk_par_izq GH tk_par_der',[]),
-  ],
-  'GF' : [
-    Rule('tk_incremento',[]), 
-    Rule('tk_decremento',[]),
-    Rule('e',[])
-  ],
-  'GH' : [
-    Rule('lexpr GG',[]),
-    Rule('e',[])
-  ],
-  'GG' : [
-    Rule('tk_coma lexpr GG',[]),
-    Rule('e',[])
-  ]
-}
-
-subgrammar_main_prog = {
-  'main_prog':[
-      Rule('JI JH end',[]),     # PRIMEROS (JH end) 
-  ],
-  'JI':[     
-      Rule('var var_decl tk_puntoycoma',[]),     
-      Rule('e',[])
-  ],
-  'JH':[
-      Rule('stmt JH',[]),     
-      Rule('e',[])   
-  ],
-}
-
-subgrammar_term = {
-  'term':[
-      Rule('factor JE',[]),     
-  ],
-  'JE':[
-      Rule('e',[]),     
-      Rule('JF factor JE',[]),     
-  ],
-  'JF':[
-      Rule('tk_mul',[]),     
-      Rule('tk_div',[]),     
-      Rule('tk_mod',[]),     
-  ],
-}
-
-subgrammar_nexpr = {
-  'nexpr': [
-    Rule('not tk_par_izq lexpr tk_par_der',[]),
-    Rule('rexpr',[])
-  ]
-}
-
-subgrammar_rexpr = {
-  'rexpr': [
-    Rule('simple_expr CA',[]),
-  ],
-  'CA': [
-    Rule('CB simple_expr', []),
-    Rule('e', [])
-  ],
-  'CB': [
-    Rule('tk_menor', []),
-    Rule('tk_igualdad', []),
-    Rule('tk_menor_igual', []),
-    Rule('tk_mayor', []),
-    Rule('tk_mayor_igual', []),
-    Rule('tk_diferente', []),
-  ]
-}
-
-subgrammar_var_decl = {
-  'var_decl' : [
-    Rule('id tk_dospuntos JK JA',[])
-  ],
-  'JK' : [
-    Rule('num',[]), 
-    Rule('bool',[])
-  ],
-  'JA' : [
-    Rule('e',[]), 
-    Rule('tk_coma id tk_dospuntos JK JA',[])
-  ]
-}
-
-subgrammar_prog = {
-    'prog' : [Rule('SA main_prog',[])],
-    'SA' : [
-      Rule('fn_decl_list SA',[]), 
-      Rule('e',[])
-    ]
-}
-
-subgrammar_fn_decl_list = {
-  'fn_decl_list' : [Rule('function fid tk_dospuntos SB tk_par_izq SC tk_par_der SD SE',[])],
-  'SB' : [
-    Rule('num',[]), # Cambiado por Gabriel
-    Rule('bool',[])
-  ],
-  'SC': [
-    Rule('var_decl',[]),
-    Rule('e',[])
-  ],
-  'SD': [
-    Rule('var var_decl tk_puntoycoma',[]),
-    Rule('e',[])
-  ],
-  'SE': [
-    Rule('stmt_block', [])
-  ]
-}
-
-subgrammar_stmt_block = {
-  'stmt_block': [Rule('SF',[])],
-  'SF': [
-    Rule('tk_llave_izq SG tk_llave_der',[]),
-    Rule('stmt',[])
-  ],
-  'SG': [
-    Rule('stmt SG',[]),
-    Rule('e', [])
-  ]
-}
-
-subgrammar_stmt = {
-  'stmt': [Rule('SH',[])],
-  'SH': [
-    Rule('print lexpr tk_puntoycoma',[]),
-    Rule('input id tk_puntoycoma',[]),
-    Rule('when tk_par_izq lexpr tk_par_der do stmt_block',[]),
-    Rule('if tk_par_izq lexpr tk_par_der do stmt_block else stmt_block',[]),
-    Rule('unless tk_par_izq lexpr tk_par_der do stmt_block',[]),
-    Rule('while tk_par_izq lexpr tk_par_der do stmt_block',[]),
-    Rule('return lexpr tk_puntoycoma',[]),
-    Rule('until tk_par_izq lexpr tk_par_der do stmt_block',[]),
-    Rule('loop stmt_block',[]),
-    Rule('do stmt_block SJ',[]),
-    Rule('repeat tk_num tk_dospuntos stmt_block',[]),
-    # REVISAR REGLA DE ABAJO 
-    Rule('for tk_par_izq lexpr tk_puntoycoma lexpr tk_puntoycoma lexpr tk_par_der do stmt_block ',[]),
-    Rule('next tk_puntoycoma',[]),
-    Rule('break tk_puntoycoma',[]),
-    Rule('tk_decremento id tk_puntoycoma',[]),
-    Rule('tk_incremento id tk_puntoycoma',[]),
-    Rule('id SI tk_puntoycoma',[]),      
-  ],
-  'SI': [
-    Rule('tk_asignacion lexpr',[]),
-    Rule('tk_sum_asig lexpr',[]),
-    Rule('tk_res_asig lexpr',[]),
-    Rule('tk_mul_asig lexpr',[]),
-    Rule('tk_div_asig lexpr',[]),
-    Rule('tk_mod_asig',[]),
-    Rule('tk_incremento',[]),
-    Rule('tk_decremento',[])
-  ],
-  'SJ': [
-    Rule('while tk_par_izq lexpr tk_par_der',[]),
-    Rule('until tk_par_izq lexpr tk_par_der',[])
-  ]
-}
-    
-grammar = {
-  **subgrammar_var_decl,
-  **subgrammar_nexpr,
-  **subgrammar_main_prog,
-  **subgrammar_term,
-  **subgrammar_lexpr,
-  **subgrammar_rexpr,
-  **subgrammar_simple_expr,
-  **subgrammar_factor,
-  **subgrammar_prog,
-  **subgrammar_fn_decl_list,
-  **subgrammar_stmt_block,
-  **subgrammar_stmt
-}
+grammarFile = "./src/grammarFile.txt"
+grammar = {}
+with open(grammarFile,'r') as f:
+  text = f.read()
+  grammarRules = text.split("&")
+  for g in grammarRules:
+    grammar = {
+        **grammar,
+        **createGrammarDict(g)
+    }
 
 if __name__ == "__main__":
   import sys 

@@ -1,0 +1,134 @@
+lexpr -> nexpr GA 
+GA -> tk_and nexpr GB
+GA -> tk_or nexpr GC
+GA -> e
+GB -> tk_and nexpr GB
+GB -> e
+GC -> tk_or nexpr GC
+GC -> e
+
+&
+
+simple_expr -> term GD
+GD -> tk_mas term GD
+GD -> tk_menos term GD
+GD -> e
+
+&
+
+factor -> tk_num
+factor -> true
+factor -> false
+factor -> id GF
+factor -> tk_incremento ID
+factor -> tk_decremento ID
+factor -> tk_par_izq lexpr tk_par_der
+factor -> fid tk_par_izq GH tk_par_der
+GF -> tk_incremento
+GF -> tk_decremento
+GF -> e
+GH -> lexpr GG
+GH -> e
+GG -> tk_coma lexpr GG 
+GG -> e
+
+&
+
+var_decl -> id tk_dospuntos JK JA
+JK -> num
+JK -> bool
+JA -> e
+JA -> tk_coma id tk_dospuntos JK JA
+
+&
+
+nexpr -> not tk_par_izq lexpr tk_par_der
+nexpr -> rexpr
+
+&
+
+term -> factor JE
+JE -> e
+JE -> JF factor JE
+JF -> tk_mul
+JF -> tk_div
+JF -> tk_mod
+
+&
+
+main_prog -> JI JH end
+JI -> var var_decl tk_puntoycoma
+JI -> e
+JH -> stmt JH
+JH -> e
+
+&
+
+rexpr -> simple_expr CA
+CA -> CB simple_expr
+CA -> e
+CB -> tk_menor
+CB -> tk_igualdad
+CB -> tk_menor_igual
+CB -> tk_mayor
+CB -> tk_mayor_igual
+CB -> tk_diferente
+
+&
+
+prog -> SA main_prog
+SA -> fn_decl_list SA
+SA -> e
+
+&
+
+fn_decl_list -> function fid tk_dospuntos SB tk_par_izq SC tk_par_der SD SE
+SB -> num
+SB -> bool
+SC -> var_decl
+SC -> e
+SD -> var var_decl tk_puntoycoma
+SD -> e
+SE -> stmt_block
+
+&
+
+stmt_block -> SF
+SF -> tk_llave_izq stmt SG tk_llave_der
+SF -> stmt
+SG -> stmt SG
+SG -> e
+
+&
+
+stmt -> SH
+SH -> print lexpr tk_puntoycoma
+SH -> input id tk_puntoycoma
+SH -> when tk_par_izq lexpr tk_par_der do stmt_block
+SH -> if tk_par_izq lexpr tk_par_der do stmt_block else stmt_block
+SH -> unless tk_par_izq lexpr tk_par_der do stmt_block
+SH -> while tk_par_izq lexpr tk_par_der do stmt_block
+SH -> return lexpr tk_puntoycoma
+SH -> until tk_par_izq lexpr tk_par_der do stmt_block
+SH -> loop stmt_block
+SH -> do stmt_block SJ
+SH -> repeat tk_num tk_dospuntos stmt_block
+SH -> for tk_par_izq lexpr tk_puntoycoma lexpr tk_puntoycoma lexpr tk_par_der do stmt_block
+SH -> next tk_puntoycoma
+SH -> break tk_puntoycoma
+SH -> tk_decremento id tk_puntoycoma
+SH -> tk_incremento id tk_puntoycoma
+SH -> id SI tk_puntoycoma
+SI -> tk_asignacion lexpr
+SI -> tk_sum_asig lexpr
+SI -> tk_res_asig lexpr
+SI -> tk_mul_asig lexpr
+SI -> tk_div_asig lexpr
+SI -> tk_mod_asig
+SI -> tk_incremento
+SI -> tk_decremento
+SJ -> while tk_par_izq lexpr tk_par_der
+SJ -> until tk_par_izq lexpr tk_par_der
+
+
+
