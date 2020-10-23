@@ -236,7 +236,6 @@ def asd(nonterminal, processedGrammar, lexical, noEndError):
   if len(selectedRule) > 1: print("----> grammar error") # Si el largo es mas que 1, hay muchos conjuntos de prediccion
   if len(selectedRule) == 0: # si el largo es 0, el simbolo no esta en prediccion
     predictions = {symbol for rule in rules for symbol in rule.pred}
-    # print(f"  Error in {nonterminal}")
     raise SyntacticError(firstSymbol.row, firstSymbol.col, firstSymbol.lexema, predictions)
 
   # print(f"  selected rule {selectedRule}")
@@ -284,6 +283,9 @@ if __name__ == "__main__":
   syntacticAnalizer.generatePredictionSets()
 
   noEndError = SyntacticNoEndError(data)
+
+  # for nt in syntacticAnalizer.noTerminals: 
+  #   print(nt, syntacticAnalizer.noTerminals[nt])
 
   try:
     print(asd('prog', syntacticAnalizer.noTerminals, lexical, noEndError))

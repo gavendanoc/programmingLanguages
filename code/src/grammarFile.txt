@@ -1,3 +1,25 @@
+commalexpr -> nexpr commaGA 
+commaGA -> and nexpr commaGB
+commaGA -> or nexpr commaGC
+commaGA -> e
+commaGB -> and nexpr commaGB
+commaGB -> e
+commaGC -> or nexpr commaGC
+commaGC -> e
+
+&
+
+parlexpr -> nexpr parGA 
+parGA -> and nexpr parGB
+parGA -> or nexpr parGC
+parGA -> e
+parGB -> and nexpr parGB
+parGB -> e
+parGC -> or nexpr parGC
+parGC -> e
+
+&
+
 lexpr -> nexpr GA 
 GA -> and nexpr GB
 GA -> or nexpr GC
@@ -22,14 +44,14 @@ factor -> false
 factor -> id GF
 factor -> tk_incremento ID
 factor -> tk_decremento ID
-factor -> tk_par_izq lexpr tk_par_der
+factor -> tk_par_izq parlexpr tk_par_der
 factor -> fid tk_par_izq GH tk_par_der
 GF -> tk_incremento
 GF -> tk_decremento
 GF -> e
-GH -> lexpr GG
+GH -> commalexpr GG
 GH -> e
-GG -> tk_coma lexpr GG 
+GG -> tk_coma commalexpr GG 
 GG -> e
 
 &
@@ -42,7 +64,7 @@ JA -> tk_coma id tk_dospuntos JK JA
 
 &
 
-nexpr -> not tk_par_izq lexpr tk_par_der
+nexpr -> not tk_par_izq parlexpr tk_par_der
 nexpr -> rexpr
 
 &
@@ -104,16 +126,16 @@ SG -> e
 stmt -> SH
 SH -> print lexpr tk_puntoycoma
 SH -> input id tk_puntoycoma
-SH -> when tk_par_izq lexpr tk_par_der do stmt_block
-SH -> if tk_par_izq lexpr tk_par_der do stmt_block else stmt_block
-SH -> unless tk_par_izq lexpr tk_par_der do stmt_block
-SH -> while tk_par_izq lexpr tk_par_der do stmt_block
+SH -> when tk_par_izq parlexpr tk_par_der do stmt_block
+SH -> if tk_par_izq parlexpr tk_par_der do stmt_block else stmt_block
+SH -> unless tk_par_izq parlexpr tk_par_der do stmt_block
+SH -> while tk_par_izq parlexpr tk_par_der do stmt_block
 SH -> return lexpr tk_puntoycoma
-SH -> until tk_par_izq lexpr tk_par_der do stmt_block
+SH -> until tk_par_izq parlexpr tk_par_der do stmt_block
 SH -> loop stmt_block
 SH -> do stmt_block SJ
 SH -> repeat tk_num tk_dospuntos stmt_block
-SH -> for tk_par_izq lexpr tk_puntoycoma lexpr tk_puntoycoma lexpr tk_par_der do stmt_block
+SH -> for tk_par_izq lexpr tk_puntoycoma lexpr tk_puntoycoma parlexpr tk_par_der do stmt_block
 SH -> next tk_puntoycoma
 SH -> break tk_puntoycoma
 SH -> tk_decremento id tk_puntoycoma
@@ -127,8 +149,8 @@ SI -> tk_div_asig lexpr
 SI -> tk_mod_asig
 SI -> tk_incremento
 SI -> tk_decremento
-SJ -> while tk_par_izq lexpr tk_par_der
-SJ -> until tk_par_izq lexpr tk_par_der
+SJ -> while tk_par_izq parlexpr tk_par_der
+SJ -> until tk_par_izq parlexpr tk_par_der
 
 
 
