@@ -12,7 +12,7 @@ This guide follows the recommended project structure for testing given [here](ht
 #### How to use ?
 This repo uses a python library called `unittest`, which allows testing as a command line tool. This [site](https://realpython.com/python-testing/) offers an introduction, but you can always check the [docs](https://docs.python.org/3/library/unittest.html).  
 
-Running syntactic analyzer 
+Running lexical analyzer 
 ```shell
 $ cd src
 $ python3 lexical.py
