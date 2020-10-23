@@ -27,14 +27,14 @@ function @max:num (x:num, y:num)
 print @min(1,2);
 print @max(1,2);
 end""",
-      "result": """"""
+      "result": """El analisis sintactico ha finalizado correctamente."""
     }
     self.assertEqual(test.getOutput(case["code"]), case["result"])
 
   def test_ex2(self):
     case = {
       "code": """end""",
-      "result": """"""
+      "result": """El analisis sintactico ha finalizado correctamente."""
     }
     self.assertEqual(test.getOutput(case["code"]), case["result"])
   
@@ -60,7 +60,7 @@ function @asignar:num (x:num, y:num)
 
 end
 """,
-      "result": """"""
+      "result": """El analisis sintactico ha finalizado correctamente."""
     }
     self.assertEqual(test.getOutput(case["code"]), case["result"])
 
@@ -73,7 +73,7 @@ function @retornay: (x:num, y:num)
   }
 end
 """,
-      "result": """<2:21> Error sintactico: se encontro: ‘(’; se esperaba: 'bool', 'num'."""
+      "result": """<2:21> Error sintactico: se encontro: '('; se esperaba: 'bool', 'num'."""
     }
     self.assertEqual(test.getOutput(case["code"]), case["result"])
 
@@ -83,14 +83,14 @@ end
 variable;
 end
 """,
-      "result": """<2:9> Error sintactico: se encontro: ‘;’; se esperaba: '%=', '*=', '++', '+=', '--', '-=', '/=', ':='."""
+      "result": """<2:9> Error sintactico: se encontro: ';'; se esperaba: '%=', '*=', '++', '+=', '--', '-=', '/=', ':='."""
     }
     self.assertEqual(test.getOutput(case["code"]), case["result"])
 
   def test_ex6(self):
     case = {
       "code": """variable := ;""",
-      "result": """<1:13> Error sintactico: se encontro: ‘;’; se esperaba: '(', '++', '--', 'false', 'identificador de funcion', 'identificador', 'not', 'numero', 'true'."""
+      "result": """<1:13> Error sintactico: se encontro: ';'; se esperaba: '(', '++', '--', 'false', 'identificador de funcion', 'identificador', 'not', 'numero', 'true'."""
     }
     self.assertEqual(test.getOutput(case["code"]), case["result"])
 

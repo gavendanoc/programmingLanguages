@@ -202,6 +202,7 @@ class SyntacticError(Exception):
     self.message = "<{}:{}> Error sintactico: se encontro: '{}'; se esperaba: {}.".format(row, col, lexem, expected)
     super().__init__(self.message)
 
+  @staticmethod
   def convertSymbol (symbol):
     if symbol in SyntacticError.symbolToErrorMessage.keys():
       return SyntacticError.symbolToErrorMessage[symbol]
@@ -224,7 +225,7 @@ def asd(nonterminal, processedGrammar, lexical):
     raise SyntacticError(None, None, message="Error sintactico: se encontro final de archivo; se esperaba ‘end’.") # no hay mas simbolos para leer
   
   rules = processedGrammar[nonterminal].rules
-  print("regla: ",nonterminal,rules,"\n")
+  # print("regla: ",nonterminal,rules,"\n")
   selectedRule = list(filter(lambda rule : firstSymbol.token in rule.pred, rules))
   if len(selectedRule) > 1: print("----> grammar error") # Si el largo es mas que 1, hay muchos conjuntos de prediccion
   if len(selectedRule) == 0: # si el largo es 0, el simbolo no esta en prediccion
@@ -241,6 +242,7 @@ def asd(nonterminal, processedGrammar, lexical):
       match(symbol, lexical)
     else: 
       asd(symbol, processedGrammar, lexical)
+  return 'El analisis sintactico ha finalizado correctamente.'
 
 def createGrammarDict(grammarText):
   grammarDict = {}
@@ -255,15 +257,16 @@ def createGrammarDict(grammarText):
     grammarDict[nt].append(Rule(rowTks,[]))
   return grammarDict
 
-grammarFile = "./grammarFile.txt"
+
+grammarFile = "./grammarFile.txt" if __name__ == "__main__" else "./src/grammarFile.txt"
 grammar = {}
 with open(grammarFile,'r') as f:
   text = f.read()
   grammarRules = text.split("&")
   for g in grammarRules:
     grammar = {
-        **grammar,
-        **createGrammarDict(g)
+      **grammar,
+      **createGrammarDict(g)
     }
 
 if __name__ == "__main__":
@@ -275,8 +278,7 @@ if __name__ == "__main__":
   syntacticAnalizer.generatePredictionSets()
 
   try:
-    asd('prog', syntacticAnalizer.noTerminals, lexical)
-    print('El analisis sintactico ha finalizado correctamente.')
+    print(asd('prog', syntacticAnalizer.noTerminals, lexical))
   except SyntacticError as se:
     print(se.message)
   except LexicalError as le:
