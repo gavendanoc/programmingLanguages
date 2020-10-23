@@ -9,7 +9,6 @@ class TestUncode(unittest.TestCase):
     {    print(100);
 
 }
-
 """,
       "result": """<7:1> Error sintactico: se encontro final de archivo; se esperaba 'end'."""
     }
