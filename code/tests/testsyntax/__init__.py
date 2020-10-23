@@ -1,5 +1,6 @@
 from src.lexical import Lexical, LexicalError
-from src.main import grammar, asd
+from src.main import grammar
+from src.syntax.asd import asd
 from src.syntax.syntacticAnalizer import SyntacticAnalizer
 from src.syntax.syntacticError import SyntacticError
 from src.syntax.syntacticNoEndError import SyntacticNoEndError
