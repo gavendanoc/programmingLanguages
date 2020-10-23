@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 
-Syntactic Analyzer 
+Syntactic Analyzer
 
 Members:
 * Gabriel Andres Avendaño Casadiego  gavendanoc@unal.edu.co
@@ -30,33 +30,6 @@ def match(expectedSymbol, lexical):
         raise SyntacticError(token.row, token.col,
                              token.lexema, [expectedSymbol])
 
-<<<<<<< HEAD
-=======
-def asd(nonterminal, processedGrammar, lexical, noEndError):
-  firstSymbol = lexical.peekToken()
-  # print(f"Enter {nonterminal} reading symbol {firstSymbol}")
-  if firstSymbol == None: 
-    raise noEndError # no hay mas simbolos para leer
-  
-  rules = processedGrammar[nonterminal].rules
-  # print("regla: ",nonterminal,rules,"\n")
-  selectedRule = list(filter(lambda rule : firstSymbol.token in rule.pred, rules))
-  if len(selectedRule) > 1: print("----> grammar error") # Si el largo es mas que 1, hay muchos conjuntos de prediccion
-  if len(selectedRule) == 0: # si el largo es 0, el simbolo no esta en prediccion
-    predictions = {symbol for rule in rules for symbol in rule.pred}
-    raise SyntacticError(firstSymbol.row, firstSymbol.col, firstSymbol.lexema, predictions)
-
-  # print(f"  selected rule {selectedRule}")
-  ruleSymbols = selectedRule[0].ruleSymbols
-  if ruleSymbols == ['e']: ruleSymbols = []
-  for symbol in ruleSymbols: 
-    if symbol not in processedGrammar.keys():
-      # print(f"      {nonterminal} matching {symbol}")
-      match(symbol, lexical)
-    else: 
-      asd(symbol, processedGrammar, lexical, noEndError)
-  return 'El analisis sintactico ha finalizado correctamente.'
->>>>>>> 8426a6326bd4348cf7c40d7ae8cd0df3e548ff22
 
 def asd(nonterminal, processedGrammar, lexical, noEndError):
     firstSymbol = lexical.peekToken()
@@ -132,17 +105,9 @@ if __name__ == "__main__":
 
     noEndError = SyntacticNoEndError(data)
 
-<<<<<<< HEAD
+    # syntacticAnalizer.showProperties() # Muestra Primeros,Siguientes, de todo
+
     try:
         print(asd('prog', syntacticAnalizer.noTerminals, lexical, noEndError))
     except (SyntacticError, SyntacticNoEndError, LexicalError) as se:
         print(se.message)
-=======
-  # for nt in syntacticAnalizer.noTerminals: 
-  #   print(nt, syntacticAnalizer.noTerminals[nt])
-
-  try:
-    print(asd('prog', syntacticAnalizer.noTerminals, lexical, noEndError))
-  except (SyntacticError, SyntacticNoEndError, LexicalError) as se:
-    print(se.message)
->>>>>>> 8426a6326bd4348cf7c40d7ae8cd0df3e548ff22

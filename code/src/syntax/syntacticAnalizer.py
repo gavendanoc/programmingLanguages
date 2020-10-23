@@ -117,4 +117,4 @@ class SyntacticAnalizer:
 
     def showProperties(self):
         for nt in self.noTerminals:
-            print(nt, syntacticAnalizer.noTerminals[nt])
+            print(nt, self.noTerminals[nt], '\n')
