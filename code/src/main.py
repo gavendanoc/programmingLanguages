@@ -1,3 +1,14 @@
+# -*- coding: utf-8 -*-
+"""
+
+Syntactic Analyzer 
+
+Members:
+* Gabriel Andres Avendaño Casadiego  gavendanoc@unal.edu.co
+* Santiago Duque Bernal              saduquebe@unal.edu.co
+* Juan Diego Medina Naranjo          jmedinan@unal.edu.co
+"""
+
 if __name__ == "__main__": 
   from lexical import Lexical, LexicalError
 else:
@@ -185,44 +196,40 @@ class SyntacticError(Exception):
     'tk_llave_der' : '}'
   } 
 
-  def __init__(self, lexem, predictions, row=1, col=1, message=None):
-    if message != None:
-      self.message = message
-      super().__init__(self.message)
-      return
-
+  def __init__(self, row, col, lexem=None, predictions=None):
     expected = sorted(map(SyntacticError.convertSymbol, predictions))
-    for i,v in enumerate(expected):
-      if i == len(expected)-1:
-        break
-      if v in expected[i+1]:
-        expected[i] = expected[i+1]
-        expected[i+1] = v
-    expected = str(expected)[1:-1] # Quitar corchetes al inicio y final de lista
+    expected = ', '.join(expected) # Quitar corchetes al inicio y final de lista
     self.message = "<{}:{}> Error sintactico: se encontro: '{}'; se esperaba: {}.".format(row, col, lexem, expected)
     super().__init__(self.message)
 
   @staticmethod
   def convertSymbol (symbol):
     if symbol in SyntacticError.symbolToErrorMessage.keys():
-      return SyntacticError.symbolToErrorMessage[symbol]
+      return f"'{SyntacticError.symbolToErrorMessage[symbol]}'"
     else:
-      return symbol
+      return f"'{symbol}'"
 
   def __str__(self):
     return self.message
+
+class SyntacticNoEndError(Exception):
+  def __init__(self, data):
+    row = len(data)
+    col = len(data[-1])
+    self.message = f"<{row}:{col}> Error sintactico: se encontro final de archivo; se esperaba 'end'." 
+    super().__init__(self.message)
 
 def match(expectedSymbol, lexical):
   token = lexical.nextToken()
   # TODO : Cambiar, los tokens en realidad son objectos (Class token)
   if token.token != expectedSymbol: 
-    raise SyntacticError(token.lexema, [expectedSymbol], token.row, token.col)
+    raise SyntacticError(token.row, token.col, token.lexema, [expectedSymbol])
 
-def asd(nonterminal, processedGrammar, lexical):
+def asd(nonterminal, processedGrammar, lexical, noEndError):
   firstSymbol = lexical.peekToken()
   # print(f"Enter {nonterminal} reading symbol {firstSymbol}")
   if firstSymbol == None: 
-    raise SyntacticError(None, None, message="Error sintactico: se encontro final de archivo; se esperaba ‘end’.") # no hay mas simbolos para leer
+    raise noEndError # no hay mas simbolos para leer
   
   rules = processedGrammar[nonterminal].rules
   # print("regla: ",nonterminal,rules,"\n")
@@ -231,7 +238,7 @@ def asd(nonterminal, processedGrammar, lexical):
   if len(selectedRule) == 0: # si el largo es 0, el simbolo no esta en prediccion
     predictions = {symbol for rule in rules for symbol in rule.pred}
     # print(f"  Error in {nonterminal}")
-    raise SyntacticError(firstSymbol.lexema, predictions, firstSymbol.row, firstSymbol.col)
+    raise SyntacticError(firstSymbol.row, firstSymbol.col, firstSymbol.lexema, predictions)
 
   # print(f"  selected rule {selectedRule}")
   ruleSymbols = selectedRule[0].ruleSymbols
@@ -241,7 +248,7 @@ def asd(nonterminal, processedGrammar, lexical):
       # print(f"      {nonterminal} matching {symbol}")
       match(symbol, lexical)
     else: 
-      asd(symbol, processedGrammar, lexical)
+      asd(symbol, processedGrammar, lexical, noEndError)
   return 'El analisis sintactico ha finalizado correctamente.'
 
 def createGrammarDict(grammarText):
@@ -277,10 +284,9 @@ if __name__ == "__main__":
   syntacticAnalizer = SyntacticAnalizer(grammar)
   syntacticAnalizer.generatePredictionSets()
 
+  noEndError = SyntacticNoEndError(data)
+
   try:
-    print(asd('prog', syntacticAnalizer.noTerminals, lexical))
-  except SyntacticError as se:
+    print(asd('prog', syntacticAnalizer.noTerminals, lexical, noEndError))
+  except (SyntacticError, SyntacticNoEndError, LexicalError) as se:
     print(se.message)
-  except LexicalError as le:
-    print(le.message)
-  
