@@ -59,35 +59,29 @@ class SyntacticAnalizer:
 
   def __calculateFirsts(self,noTerminalSymbol, rules):
     for rule in rules: #analiza regla por regla
-      for i, symbol in enumerate(rule.ruleSymbols):
-        if symbol == "e" and i == 0 : #paso 1
-          self.noTerminals[noTerminalSymbol].addFirst("e")
-        elif symbol not in self.grammar and i == 0: #paso 2-a
-          self.noTerminals[noTerminalSymbol].addFirst(symbol)
-        elif symbol in self.grammar and i == 0: #paso 2-b
-          symbolRules = self.grammar.get(symbol)
-          if self.noTerminals[symbol].firsts == []:
-            self.__calculateFirsts(symbol, symbolRules)
-          symbolFirsts = self.noTerminals[symbol].firsts
-          addToTerminal = set(symbolFirsts).difference("e")
-          self.noTerminals[noTerminalSymbol].addFirst(list(addToTerminal))
-          if "e" in symbolFirsts: #paso 2-c
-            length = len(rule.ruleSymbols)
-            if length == 1:
-              self.noTerminals[noTerminalSymbol].addFirst("e")
-            elif length > 1:
-              if rule.ruleSymbols[i+1] in self.grammar:
-                remaining = self.noTerminals[rule.ruleSymbols[i+1]].firsts
-                if remaining != []:
-                  self.noTerminals[noTerminalSymbol].addFirst(remaining)
-                else:
-                  remRules = self.grammar.get(rule.ruleSymbols[i+1])
-                  self.__calculateFirsts(rule.ruleSymbols[i+1],remRules)
-                  remaining = self.noTerminals[rule.ruleSymbols[i+1]].firsts
-                  self.noTerminals[noTerminalSymbol].addFirst(remaining)
-              elif rule.ruleSymbols[i+1] not in self.grammar:
-                self.noTerminals[noTerminalSymbol].addFirst(rule.ruleSymbols[i+1])
-
+      if rule.ruleSymbols[0] == "e":
+        self.noTerminals[noTerminalSymbol].addFirst("e")
+      else:
+        for symbol in rule.ruleSymbols:
+          if symbol not in self.grammar:
+            self.noTerminals[noTerminalSymbol].addFirst(symbol)
+            break
+          elif symbol in self.grammar:
+            if self.noTerminals[symbol].firsts == []:
+              symbolRules = self.grammar.get(symbol)
+              self.__calculateFirsts(symbol, symbolRules)
+            symbolFirsts = self.noTerminals[symbol].firsts
+            addToTerminal = set(symbolFirsts).difference("e")
+            self.noTerminals[noTerminalSymbol].addFirst(list(addToTerminal))
+            if "e" in symbolFirsts:
+              length = len(rule.ruleSymbols)
+              if length == 1:
+                self.noTerminals[noTerminalSymbol].addFirst("e")
+              elif length > 1:
+                continue
+            else:
+              break
+            
   def makeNext(self):
     first = True
     completed = False
@@ -230,6 +224,7 @@ def asd(nonterminal, processedGrammar, lexical):
     raise SyntacticError(None, None, message="Error sintactico: se encontro final de archivo; se esperaba ‘end’.") # no hay mas simbolos para leer
   
   rules = processedGrammar[nonterminal].rules
+  print("regla: ",nonterminal,rules,"\n")
   selectedRule = list(filter(lambda rule : firstSymbol.token in rule.pred, rules))
   if len(selectedRule) > 1: print("----> grammar error") # Si el largo es mas que 1, hay muchos conjuntos de prediccion
   if len(selectedRule) == 0: # si el largo es 0, el simbolo no esta en prediccion
