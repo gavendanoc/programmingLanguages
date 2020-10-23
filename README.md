@@ -12,11 +12,23 @@ This guide follows the recommended project structure for testing given [here](ht
 #### How to use ?
 This repo uses a python library called `unittest`, which allows testing as a command line tool. This [site](https://realpython.com/python-testing/) offers an introduction, but you can always check the [docs](https://docs.python.org/3/library/unittest.html).  
 
+Running syntactic analyzer 
+```shell
+$ cd src
+$ python3 lexical.py
+```
+
+Running syntactic analyzer 
+```shell
+$ cd src
+$ python3 main.py
+```
+
 ##### Examples
 
 For checking all test:
 ```shell
-$ cd lexicalAnalyzer
+$ cd code
 $ python3 -m unittest
 ```
 
@@ -26,13 +38,13 @@ $ cd code
 $ python3 -m unittest tests.testlexical.testCharacters
 ```
 
-This worsks for other folders too, in this case syntactic examples:
+Another example,  running test over a single test set
 ```shell
 $ cd code
 $ python3 -m unittest tests.testsyntax.testExamples
 ```
 
-You can also check a whole section, for running all the syntax test do : 
+You can also check a whole section, for running all the syntax tests do : 
 ```shell
 $ cd code
 $ python3 -m unittest discover tests.testsyntax
